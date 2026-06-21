@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "files": 301,
+    "routeShells": 12,
+    "tables": 13,
+    "indexes": 15,
+    "inserts": 40,
+    "users": 0,
+    "routesGenerated": 28
+  },
+  "envKeys": [],
+  "redactedSecretKeys": [],
+  "assetMigration": {
+    "oldBase": "https://unknown.mochausercontent.com/",
+    "newBase": "https://dtvoeevhaseb5.cloudfront.net/uploads/mocha-import/8031624b-b018-4bb0-bed0-7c78d59565e0/",
+    "assetCount": 4
+  },
+  "notes": [
+    "tailwind.config: Unknown theme.extend namespace \"keyframes\" — skipped. v4 may not support it as a @theme key.",
+    "tailwind.config: Unknown theme.extend namespace \"animation\" — skipped. v4 may not support it as a @theme key.",
+    "tailwind.config: Config has 1 plugin(s) — these aren't ported automatically. Common Tailwind v3 plugins (typography, forms, container-queries, aspect-ratio) ship as v4-compatible packages; add them as @plugin directives in global.css.",
+    "rewrite-routes: emitted 12 app/ route shells.",
+    "strip-mocha-build: merged 2 runtime dep(s) from user package.json; pinned 1 dep(s).",
+    "rewrite-imports: rewrote 61 file(s).",
+    "sqlite-to-pg: 13 tables, 15 indexes, 40 inserts; skipped 8 _mocha_migrations rows.",
+    "asset-rewrite: 0 file(s) updated; 0 per-url + 0 base-host substitution(s); old=https://unknown.mochausercontent.com/ new=https://dtvoeevhaseb5.cloudfront.net/uploads/mocha-import/8031624b-b018-4bb0-bed0-7c78d59565e0/",
+    "seed-users: 0 users in export."
+  ],
+  "manualSteps": []
+}
