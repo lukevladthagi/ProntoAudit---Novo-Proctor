@@ -1,4 +1,4 @@
-import { createTransport } from "nodemailer";
+import nodemailer from "nodemailer";
 
 interface PasswordResetEmail {
   to: string;
@@ -17,7 +17,7 @@ function requiredEnv(name: string) {
 function getTransporter() {
   const port = Number(process.env.SMTP_PORT ?? 587);
 
-  return createTransport({
+  return nodemailer.createTransport({
     host: requiredEnv("SMTP_HOST"),
     port,
     secure: port === 465,
