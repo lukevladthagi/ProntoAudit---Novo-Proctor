@@ -1,0 +1,17 @@
+services:
+  prontoaudit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prontoaudit:latest
+    container_name: prontoaudit
+    restart: unless-stopped
+    env_file:
+      - ./apps/web/.env
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 4000
+      TZ: America/Sao_Paulo
+    ports:
+      - "4006:4000"

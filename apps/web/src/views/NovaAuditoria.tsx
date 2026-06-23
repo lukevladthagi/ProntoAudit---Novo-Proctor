@@ -100,7 +100,7 @@ export default function NovaAuditoriaPage() {
 
   // Filter setores by selected unidade
   const filteredSetores = formData.unidade_id
-    ? setores.filter((s) => s.unidade_id === parseInt(formData.unidade_id))
+    ? setores.filter((s) => Number(s.unidade_id) === parseInt(formData.unidade_id))
     : setores;
 
   if (loading) {
