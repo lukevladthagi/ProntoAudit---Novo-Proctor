@@ -28,6 +28,7 @@ interface AuditHeaderProps {
   nao_avaliados: number;
   total: number;
   tempo_decorrido?: string;
+  isSaving?: boolean;
   onSave?: () => void;
   onFinalize?: () => void;
 }
@@ -47,6 +48,7 @@ export function AuditHeader({
   nao_avaliados,
   total,
   tempo_decorrido,
+  isSaving = false,
   onSave,
   onFinalize,
 }: AuditHeaderProps) {
@@ -78,9 +80,9 @@ export function AuditHeader({
           <p className="mt-1 text-sm text-muted-foreground">{tipo}</p>
         </div>
         <div className="ml-4 flex gap-2">
-          <Button variant="outline" onClick={onSave}>
+          <Button variant="outline" onClick={onSave} disabled={isSaving}>
             <Save className="mr-2 h-4 w-4" />
-            Salvar Progresso
+            {isSaving ? "Salvando..." : "Salvar Progresso"}
           </Button>
           <Button onClick={onFinalize} disabled={nao_avaliados > 0}>
             <CheckCircle2 className="mr-2 h-4 w-4" />

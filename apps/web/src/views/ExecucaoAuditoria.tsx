@@ -29,6 +29,8 @@ export default function ExecucaoAuditoriaPage() {
   const [requisitos, setRequisitos] = useState<RequisitoData[]>([]);
   const [filtroConformidade, setFiltroConformidade] = useState<string>("todos");
   const [filtroBusca, setFiltroBusca] = useState<string>("");
+  const [savingProgress, setSavingProgress] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Update local state when data loads
   useEffect(() => {
@@ -74,9 +76,18 @@ export default function ExecucaoAuditoriaPage() {
 
   const total = requisitos.length;
   const avaliados = total - stats.nao_avaliados;
-  const progresso = Math.round((avaliados / total) * 100);
+  const progresso = total > 0 ? Math.round((avaliados / total) * 100) : 0;
+
+  const mapConformidadeToDatabase = (
+    conformidade: Exclude<RequisitoData["conformidade"], null | undefined>
+  ) => {
+    if (conformidade === "parcial") return "parcialmente_conforme";
+    return conformidade;
+  };
 
   const handleRequisitoChange = async (requisitoId: number, data: Partial<RequisitoData>) => {
+    setSaveMessage(null);
+
     // Update local state immediately for UI feedback
     setRequisitos((prev) =>
       prev.map((req) => (req.id === requisitoId ? { ...req, ...data } : req))
@@ -84,11 +95,7 @@ export default function ExecucaoAuditoriaPage() {
 
     // Save to backend
     if (data.conformidade) {
-      // Map component conformidade to database conformidade
-      let dbConformidade: string = data.conformidade;
-      if (data.conformidade === "parcial") {
-        dbConformidade = "parcialmente_conforme";
-      }
+      const dbConformidade = mapConformidadeToDatabase(data.conformidade);
 
       const success = await updateRequisito(
         requisitoId,
@@ -99,6 +106,10 @@ export default function ExecucaoAuditoriaPage() {
 
       if (!success) {
         console.error("Failed to save requisito evaluation");
+        setSaveMessage({
+          type: "error",
+          text: "Não foi possível salvar esta avaliação. Tente novamente.",
+        });
       }
     }
     
@@ -118,8 +129,48 @@ export default function ExecucaoAuditoriaPage() {
     // TODO: Open dialog to create finding
   };
 
-  const handleSaveProgress = () => {
-    console.log("Progress auto-saved");
+  const handleSaveProgress = async () => {
+    const avaliadosParaSalvar = requisitos.filter(
+      (req): req is RequisitoData & {
+        conformidade: Exclude<RequisitoData["conformidade"], null | undefined>;
+      } => Boolean(req.conformidade)
+    );
+
+    if (avaliadosParaSalvar.length === 0) {
+      setSaveMessage({
+        type: "error",
+        text: "Nenhum requisito avaliado para salvar.",
+      });
+      return;
+    }
+
+    setSavingProgress(true);
+    setSaveMessage(null);
+
+    const results = await Promise.all(
+      avaliadosParaSalvar.map((req) =>
+        updateRequisito(
+          req.id,
+          mapConformidadeToDatabase(req.conformidade),
+          req.observacoes,
+          req.evidencias
+        )
+      )
+    );
+
+    setSavingProgress(false);
+
+    if (results.every(Boolean)) {
+      setSaveMessage({
+        type: "success",
+        text: `${avaliadosParaSalvar.length} avaliação(ões) salva(s) com sucesso.`,
+      });
+    } else {
+      setSaveMessage({
+        type: "error",
+        text: "Algumas avaliações não foram salvas. Tente novamente.",
+      });
+    }
   };
 
   const handleFinalize = async () => {
@@ -228,9 +279,22 @@ export default function ExecucaoAuditoriaPage() {
           nao_avaliados={stats.nao_avaliados}
           total={total}
           tempo_decorrido="--"
+          isSaving={savingProgress}
           onSave={handleSaveProgress}
           onFinalize={handleFinalize}
         />
+        {saveMessage && (
+          <div
+            className={
+              "mt-3 rounded-lg border px-4 py-3 text-sm " +
+              (saveMessage.type === "success"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-red-200 bg-red-50 text-red-700")
+            }
+          >
+            {saveMessage.text}
+          </div>
+        )}
       </div>
 
       {/* Filters */}
