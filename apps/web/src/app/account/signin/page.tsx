@@ -87,6 +87,15 @@ function SignInForm() {
             </div>
           </div>
 
+          <div className="mt-3 text-right">
+            <a
+              href="/account/forgot-password"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              Esqueci minha senha
+            </a>
+          </div>
+
           {error && (
             <div className="mt-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
               {error}

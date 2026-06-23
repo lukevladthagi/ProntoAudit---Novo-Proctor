@@ -17,6 +17,7 @@ import { betterAuth } from 'better-auth';
 import { createAuthMiddleware } from 'better-auth/api';
 import { bearer } from 'better-auth/plugins';
 import ws from 'ws';
+import { sendPasswordResetEmail } from './email';
 
 neonConfig.webSocketConstructor = ws;
 
@@ -46,6 +47,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendPasswordResetEmail({
+        to: user.email,
+        name: user.name,
+        resetUrl: url,
+      });
+    },
   },
   hooks: {
     // better-auth's /sign-up/email schema requires `name`. Generated user apps

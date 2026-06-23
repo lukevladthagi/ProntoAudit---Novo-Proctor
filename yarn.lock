@@ -19028,6 +19028,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nodemailer@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "nodemailer@npm:9.0.1"
+  checksum: 10c0/4213f01aa211127c1ce33243c5e45e7f831601a933d03fa864cd827b1bd5ea2782cb4b43722bee7028cbc193733d9802dad1120fe67181448eb0b7de52218a37
+  languageName: node
+  linkType: hard
+
 "nopt@npm:^9.0.0":
   version: 9.0.0
   resolution: "nopt@npm:9.0.0"
@@ -23716,6 +23723,7 @@ __metadata:
     lucide-react: "npm:^0.510.0"
     next: "npm:^16.2.6"
     next-themes: "npm:^0.4.6"
+    nodemailer: "npm:^9.0.1"
     radix-ui: "npm:^1.4.3"
     react: "npm:^19.0.4"
     react-day-picker: "npm:^9.14.0"
